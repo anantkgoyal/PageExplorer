@@ -5,6 +5,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+
 import javax.swing.JList;
 import javax.swing.JTextPane;
 
@@ -63,8 +65,16 @@ public class MainFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) 
 			{
-				String x = Navigator.Naviagte(inputField.getText());
-				textPane.setText(x);
+				String x;
+				try 
+				{
+					x = Navigator.Naviagte(inputField.getText());
+					textPane.setText(x);
+				} catch (Exception e) 
+				{
+					textPane.setText("An error occurred");
+				}
+				
 				
 			}
 		});
