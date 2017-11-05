@@ -5,10 +5,11 @@ import java.net.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
+import org.jsoup.select.Elements;
 
 public class Navigator 
 {
-	String FinalPage = "Philosophy - Wikipedia";
+	static String FinalPage = "Philosophy - Wikipedia";
 	
 	public static String Naviagte(String input) throws IOException, URISyntaxException
 	{
@@ -22,14 +23,30 @@ public class Navigator
 			return "Invalid URL";
 		}
 		
-		URL wikipedia = new URL("http://www.wikipedia.org");
+		URL wikipedia = new URL("https://www.wikipedia.org");
 		
-		URLConnection u = inputPage.openConnection();
+		PageDetails p;
+		do
+		{
+			p = ExtractPageDetails(inputPage);
+			inputPage = new URL(wikipedia, p.NextRef);
+			System.out.println(p.PageTitle);
 			
+		}while(!p.PageTitle.equals(FinalPage));
+		
+		
+		
+		return "hello World";
+	}
+	
+	private static PageDetails ExtractPageDetails(URL inputPage) throws IOException
+	{
+		URLConnection u = inputPage.openConnection();
+		
 		BufferedReader br = new BufferedReader(
                 new InputStreamReader(u.getInputStream()));
 		
-		String titlePage;
+		String titlePage = "";
 		String inputLine;
 		while ((inputLine = br.readLine()) != null) {
 			
@@ -44,19 +61,34 @@ public class Navigator
             }
 	    }
 	    br.close();
+	    	    
+	    Document title = Jsoup.parse(titlePage);
+	    String titleText = title.text();
 	    
+	    Document firstParagraph = Jsoup.parse(inputLine);
+	    Elements links = firstParagraph.select("a");
 	    
-	    System.out.println(inputLine);
+	    String firstLink = "";
+	    for(Element link : links){
+	    	
+	    	String href = link.attr("href");
+	    	
+	    	if(href.contains(":"))
+	    	{
+	    		continue;
+	    	}
+	    	
+	    	if(href.startsWith("/wiki"))
+	    	{
+	    		firstLink = href;
+	    		break;
+	    	}
+	    }
+	    	   
+	    PageDetails pageDetails = new PageDetails();
+	    pageDetails.PageTitle = titleText;
+	    pageDetails.NextRef = firstLink;
 	    
-	    Document d = Jsoup.parse(inputLine);
-	    Element link = d.select("a").first();
-	    
-	    System.out.println(link.attr("href"));
-	    
-	    
-	    
-	    
-	    
-		return "hello World";
+	    return pageDetails;
 	}
 }
