@@ -2,6 +2,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
@@ -14,6 +17,9 @@ public class Navigator
 	public static String Naviagte(String input) throws IOException, URISyntaxException
 	{
 		URL inputPage;
+		
+		Map<String, String> visited = new HashMap<String, String>();
+		
 		try 
 		{
 			
@@ -30,6 +36,16 @@ public class Navigator
 		{
 			p = ExtractPageDetails(inputPage);
 			inputPage = new URL(wikipedia, p.NextRef);
+			
+			if(visited.containsKey(p.PageTitle))
+			{
+				System.out.println("Infinite Loop");
+				break;
+			}
+			
+			String id = UUID.randomUUID().toString();
+			visited.put(p.PageTitle, id);
+			
 			System.out.println(p.PageTitle);
 			
 		}while(!p.PageTitle.equals(FinalPage));
