@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javax.swing.JList;
 import javax.swing.JTextPane;
 
-import Implementations.MySqlDataBaseConnector;
+import Implementations.*;
 
 public class MainFrame {
 
@@ -25,7 +25,7 @@ public class MainFrame {
 	 */
 	public static void main(String[] args) throws SQLException {
 		
-		_navigator = new Navigator(new MySqlDataBaseConnector());
+		_navigator = new Navigator(new MySqlDataBaseConnector(), new UrlWebConnector());
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

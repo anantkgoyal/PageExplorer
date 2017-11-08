@@ -12,19 +12,23 @@ import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
 
 import Interfaces.IDatabaseConnector;
+import Interfaces.IWebConnector;
 
 public class Navigator 
 {
 	static String FinalPage = "Philosophy";
 	
-	private IDatabaseConnector _connector;
+	private IDatabaseConnector _databaseConnector;
+	private IWebConnector _webConnector;
 	
-	public Navigator(IDatabaseConnector connector)
+	
+	public Navigator(IDatabaseConnector databaseConnector, IWebConnector webConnector)
 	{
-		_connector = connector;
+		_databaseConnector = databaseConnector;
+		_webConnector = webConnector;
 	}
 	
-	public String Naviagte(String input) throws IOException, URISyntaxException, SQLException
+	public String Naviagte(String input) throws Exception
 	{
 		URL inputPage;
 		
@@ -47,7 +51,7 @@ public class Navigator
 			p = ExtractPageDetails(inputPage);
 			inputPage = new URL(wikipedia, p.NextRef);
 					
-			if(_connector.ExistsInDataBase(p.PageTitle))
+			if(_databaseConnector.ExistsInDataBase(p.PageTitle))
 			{
 				System.out.println("Infinite Loop");
 				break;
@@ -56,7 +60,7 @@ public class Navigator
 			System.out.println(p.PageTitle);
 			
 			String id = UUID.randomUUID().toString();
-			_connector.AddToDataBase(p.PageTitle, id);
+			_databaseConnector.AddToDataBase(p.PageTitle, id);
 						
 		}while(!p.PageTitle.equals(FinalPage));
 		
@@ -65,19 +69,16 @@ public class Navigator
 		return "hello World";
 	}
 	
-	private static PageDetails ExtractPageDetails(URL inputPage) throws IOException
+	private PageDetails ExtractPageDetails(URL inputPage) throws Exception
 	{
-		URLConnection u = inputPage.openConnection();
-		
-		BufferedReader br = new BufferedReader(
-                new InputStreamReader(u.getInputStream()));
+		_webConnector.CreateWebConnection(inputPage);
 		
 		String titlePage = "";
 		String inputLine;
 		
 		String fullHtml = "";
 		
-		while ((inputLine = br.readLine()) != null) {
+		while ((inputLine = _webConnector.GetNextLineOfWebPage()) != null) {
 					
 			fullHtml = fullHtml + inputLine + "\n";
 						
@@ -86,8 +87,7 @@ public class Navigator
             	break;
             }
 	    }
-	    br.close();
-	    	    
+	    	    	    
 	    Document html = Jsoup.parse(fullHtml);
 	    Element firstParagraph = html.select("p").first();
 	    
