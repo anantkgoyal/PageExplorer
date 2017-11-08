@@ -6,19 +6,27 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.swing.JList;
 import javax.swing.JTextPane;
+
+import Implementations.MySqlDataBaseConnector;
 
 public class MainFrame {
 
 	private JFrame frame;
 	private JTextField inputField;
-
+	private static Navigator _navigator;
+	
 	/**
 	 * Launch the application.
+	 * @throws SQLException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
+		
+		_navigator = new Navigator(new MySqlDataBaseConnector());
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -68,7 +76,7 @@ public class MainFrame {
 				String x;
 				try 
 				{
-					x = Navigator.Naviagte(inputField.getText());
+					x = _navigator.Naviagte(inputField.getText());
 					textPane.setText(x);
 				} catch (Exception e) 
 				{
