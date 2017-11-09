@@ -68,13 +68,8 @@ public class MainFrame {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setBounds(31, 98, 311, 326);
-		textPane.setAutoscrolls(true);
-		
-		JScrollPane sp = new JScrollPane();
-		sp.setViewportView(textPane);
 		
 		frame.getContentPane().add(textPane);
-		frame.getContentPane().add(sp);
 
 		JButton btnNavigate = new JButton("Navigate");
 		btnNavigate.addMouseListener(new MouseAdapter() {
