@@ -16,7 +16,8 @@ import Interfaces.IWebConnector;
 
 public class Navigator 
 {
-	static String FinalPage = "Philosophy";
+	private static String FinalPage = "Philosophy";
+	private static String WikiHostEn = "en.wikipedia.org";
 	
 	private IDatabaseConnector _databaseConnector;
 	private IWebConnector _webConnector;
@@ -43,6 +44,11 @@ public class Navigator
 			return "Invalid URL";
 		}
 		
+		if(!inputPage.getHost().equals(WikiHostEn))
+		{
+			return "Please input a valid Wikipedia URL";
+		}
+		
 		URL wikipedia = new URL("https://www.wikipedia.org");
 		
 		PageDetails p;
@@ -53,7 +59,7 @@ public class Navigator
 					
 			if(_databaseConnector.ExistsInDataBase(p.PageTitle))
 			{
-				System.out.println("Infinite Loop");
+				System.out.println("Infinite Loop with " + p.PageTitle);
 				break;
 			}
 			

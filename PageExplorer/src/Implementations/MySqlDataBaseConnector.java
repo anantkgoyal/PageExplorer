@@ -12,7 +12,12 @@ public class MySqlDataBaseConnector implements IDatabaseConnector
 	{
 		mySqlConnection = DriverManager.getConnection("jdbc:mysql://localhost", "user", "password");
 		Statement statement = mySqlConnection.createStatement();
-		statement.executeLargeUpdate("TRUNCATE TABLE bento.VisitedPages");
+		
+		String tableCreationSql = "CREATE TABLE IF NOT EXISTS bento.VisitedPages (PageLink nvarchar(500), id nvarchar(40) primary key)";
+		String tableClearSql = "TRUNCATE TABLE bento.VisitedPages";
+		
+		statement.executeUpdate(tableCreationSql);
+		statement.executeUpdate(tableClearSql);
 	}
 	
 	@Override
