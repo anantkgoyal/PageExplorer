@@ -25,7 +25,7 @@ public class MainFrame {
 	 * Launch the application.
 	 * @throws SQLException 
 	 */
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws Exception {
 		
 		_navigator = new Navigator(new MySqlDataBaseConnector(), new UrlWebConnector());
 		
