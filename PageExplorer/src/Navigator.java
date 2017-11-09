@@ -74,6 +74,9 @@ public class Navigator
 	    Element firstParagraph = html.select("title").first();
 	    
 	    String firstTitle = firstParagraph.text();
+	    
+	    firstTitle = firstTitle.substring(0, firstTitle.indexOf("- Wikipedia"));
+	    
 	    wikiTrail = wikiTrail + firstTitle + "\n";
 		
 		PageDetails p;
@@ -89,7 +92,6 @@ public class Navigator
 			}
 			
 			wikiTrail = wikiTrail + p.PageTitle + "\n";
-			System.out.println(p.PageTitle);
 			
 			String id = UUID.randomUUID().toString();
 			_databaseConnector.AddToDataBase(p.PageTitle, id);
