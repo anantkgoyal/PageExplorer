@@ -31,6 +31,9 @@ public class Navigator
 	
 	public String Naviagte(String input) throws Exception
 	{
+		
+		_databaseConnector.ResetDataBase();
+		
 		URL inputPage;
 		
 		Map<String, String> visited = new HashMap<String, String>();
@@ -87,8 +90,7 @@ public class Navigator
 					
 			if(_databaseConnector.ExistsInDataBase(p.PageTitle))
 			{
-				System.out.println("Infinite Loop with " + p.PageTitle);
-				break;
+				return ("Infinite Loop with " + p.PageTitle);
 			}
 			
 			wikiTrail = wikiTrail + p.PageTitle + "\n";
@@ -102,6 +104,8 @@ public class Navigator
 		
 		return wikiTrail;
 	}
+	
+	
 	
 	private PageDetails ExtractPageDetails(URL inputPage) throws Exception
 	{

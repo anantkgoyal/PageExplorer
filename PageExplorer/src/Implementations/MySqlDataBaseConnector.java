@@ -14,10 +14,9 @@ public class MySqlDataBaseConnector implements IDatabaseConnector
 		Statement statement = mySqlConnection.createStatement();
 		
 		String tableCreationSql = "CREATE TABLE IF NOT EXISTS bento.VisitedPages (PageLink nvarchar(500), id nvarchar(40) primary key)";
-		String tableClearSql = "TRUNCATE TABLE bento.VisitedPages";
 		
 		statement.executeUpdate(tableCreationSql);
-		statement.executeUpdate(tableClearSql);
+
 	}
 	
 	@Override
@@ -44,6 +43,17 @@ public class MySqlDataBaseConnector implements IDatabaseConnector
 		int count = t.getInt("Total");	
 				
 		return count > 0;
+		
+	}
+
+	@Override
+	public void ResetDataBase() throws Exception {
+		
+		Statement statement = mySqlConnection.createStatement();
+		
+		String tableClearSql = "TRUNCATE TABLE bento.VisitedPages";
+		
+		statement.executeUpdate(tableClearSql);
 		
 	}
 

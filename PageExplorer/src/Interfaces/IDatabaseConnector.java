@@ -7,4 +7,6 @@ public interface IDatabaseConnector {
 	void AddToDataBase(String pageName, String id) throws SQLException;
 	
 	Boolean ExistsInDataBase(String pageName) throws SQLException;
+	
+	void ResetDataBase() throws Exception;
 }
