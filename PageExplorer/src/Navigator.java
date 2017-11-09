@@ -49,7 +49,32 @@ public class Navigator
 			return "Please input a valid Wikipedia URL";
 		}
 		
-		URL wikipedia = new URL("https://www.wikipedia.org");
+		URL wikipedia = new URL("https://" + WikiHostEn);
+		
+		_webConnector.CreateWebConnection(inputPage);
+		
+		String titlePage = "";
+		String inputLine;
+		
+		String fullHtml = "";
+		
+		String wikiTrail = "";
+		
+		while ((inputLine = _webConnector.GetNextLineOfWebPage()) != null) {
+					
+			fullHtml = fullHtml + inputLine + "\n";
+				
+			if(inputLine.startsWith("<title>"))
+            {
+            	break;
+            }
+	    }
+		
+		Document html = Jsoup.parse(fullHtml);
+	    Element firstParagraph = html.select("title").first();
+	    
+	    String firstTitle = firstParagraph.text();
+	    wikiTrail = wikiTrail + firstTitle + "\n";
 		
 		PageDetails p;
 		do
@@ -63,6 +88,7 @@ public class Navigator
 				break;
 			}
 			
+			wikiTrail = wikiTrail + p.PageTitle + "\n";
 			System.out.println(p.PageTitle);
 			
 			String id = UUID.randomUUID().toString();
@@ -72,7 +98,7 @@ public class Navigator
 		
 		
 		
-		return "hello World";
+		return wikiTrail;
 	}
 	
 	private PageDetails ExtractPageDetails(URL inputPage) throws Exception
