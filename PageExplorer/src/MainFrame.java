@@ -67,9 +67,11 @@ public class MainFrame {
 		frame.getContentPane().add(list);
 		
 		JTextPane textPane = new JTextPane();
-		textPane.setBounds(31, 98, 311, 326);
 		
-		frame.getContentPane().add(textPane);
+		JScrollPane scroll = new JScrollPane(textPane);
+		scroll.setBounds(31, 98, 311, 326);
+		
+		frame.getContentPane().add(scroll);
 
 		JButton btnNavigate = new JButton("Navigate");
 		btnNavigate.addMouseListener(new MouseAdapter() {
